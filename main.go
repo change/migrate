@@ -7,26 +7,43 @@ import (
 	"flag"
 	"fmt"
 	"os"
+  "io/ioutil"
 	"strconv"
 	"time"
+  "gopkg.in/yaml.v2"
 
-	"github.com/fatih/color"
-	_ "github.com/gemnasium/migrate/driver/bash"
-	_ "github.com/gemnasium/migrate/driver/cassandra"
-	_ "github.com/gemnasium/migrate/driver/mysql"
-	_ "github.com/gemnasium/migrate/driver/postgres"
-	_ "github.com/gemnasium/migrate/driver/sqlite3"
-	"github.com/gemnasium/migrate/file"
-	"github.com/gemnasium/migrate/migrate"
-	"github.com/gemnasium/migrate/migrate/direction"
-	pipep "github.com/gemnasium/migrate/pipe"
+  "github.com/fatih/color"
+  _"github.com/change/migrate/driver/bash"
+  _"github.com/change/migrate/driver/cassandra"
+  _"github.com/change/migrate/driver/mysql"
+  _"github.com/change/migrate/driver/postgres"
+  _"github.com/change/migrate/driver/sqlite3"
+  "github.com/change/migrate/file"
+  "github.com/change/migrate/migrate"
+  "github.com/change/migrate/migrate/direction"
+  pipep "github.com/change/migrate/pipe"
 )
 
 var url = flag.String("url", os.Getenv("MIGRATE_URL"), "")
 var migrationsPath = flag.String("path", "", "")
 var version = flag.Bool("version", false, "Show migrate version")
 
+type Config struct {
+  url string
+  dir string
+}
+
 func main() {
+  conf := Config{}
+
+  b, err := ioutil.ReadFile("migrations.yml")
+  if err != nil {
+    err := yaml.Unmarshal(b, &conf)
+    if err != nil {
+      panic(err)
+    }
+  }
+
 	flag.Usage = func() {
 		helpCmd()
 	}
@@ -39,8 +56,16 @@ func main() {
 	}
 
 	if *migrationsPath == "" {
-		*migrationsPath, _ = os.Getwd()
+    if conf.dir != "" {
+      *migrationsPath = conf.dir
+    } else {
+      *migrationsPath, _ = os.Getwd()
+    }
 	}
+
+  if *url == "" {
+    *url = conf.dir
+  }
 
 	switch command {
 	case "create":
