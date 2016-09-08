@@ -29,8 +29,8 @@ var migrationsPath = flag.String("path", "", "")
 var version = flag.Bool("version", false, "Show migrate version")
 
 type Config struct {
-  url string
-  dir string
+  Url string `yaml:url,omitempty`
+  Dir string `yaml:dir,omitempty`
 }
 
 func main() {
@@ -38,10 +38,11 @@ func main() {
 
   b, err := ioutil.ReadFile("migrations.yml")
   if err != nil {
-    err := yaml.Unmarshal(b, &conf)
-    if err != nil {
-      panic(err)
-    }
+    panic(err)
+  }
+  err = yaml.Unmarshal(b, &conf)
+  if err != nil {
+    panic(err)
   }
 
 	flag.Usage = func() {
@@ -56,15 +57,15 @@ func main() {
 	}
 
 	if *migrationsPath == "" {
-    if conf.dir != "" {
-      *migrationsPath = conf.dir
+    if conf.Dir != "" {
+      *migrationsPath = conf.Dir
     } else {
       *migrationsPath, _ = os.Getwd()
     }
 	}
 
   if *url == "" {
-    *url = conf.dir
+    *url = conf.Url
   }
 
 	switch command {
