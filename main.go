@@ -1,6 +1,6 @@
 // Package main is the CLI.
 // You can use the CLI via Terminal.
-// import "github.com/gemnasium/migrate/migrate" for usage within Go.
+// import "github.com/change/migrate/migrate" for usage within Go.
 package main
 
 import (
