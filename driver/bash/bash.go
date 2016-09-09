@@ -2,8 +2,8 @@
 package bash
 
 import (
-	"github.com/gemnasium/migrate/driver"
-	"github.com/gemnasium/migrate/file"
+	"github.com/change/migrate/driver"
+	"github.com/change/migrate/file"
 )
 
 type Driver struct {
