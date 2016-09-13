@@ -38,11 +38,12 @@ func main() {
 
   b, err := ioutil.ReadFile("migrations.yml")
   if err != nil {
-    panic(err)
-  }
-  err = yaml.Unmarshal(b, &conf)
-  if err != nil {
-    panic(err)
+    fmt.Println("No config file available")
+  } else {
+    err = yaml.Unmarshal(b, &conf)
+    if err != nil {
+      panic(err)
+    }
   }
 
 	flag.Usage = func() {
