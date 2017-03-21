@@ -36,7 +36,7 @@ type Config struct {
 func main() {
   conf := Config{}
 
-  b, err := ioutil.ReadFile("migrations.yml")
+  b, err := ioutil.ReadFile("config/migrations.yml")
   if err != nil {
     fmt.Println("No config file available")
   } else {
